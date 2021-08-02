@@ -18,6 +18,7 @@ class MessageType(Enum):
 class ObjectType(Enum):
     JETBOT = 0x01
     XAVIER = 0x02
+    WEB = 0x03
     TEST = 0x01
 
 
