@@ -9,7 +9,7 @@ from Network.UDPSocket import *
 class BaseObject:
     def __init__(self, hostAddress: SocketAddress) -> None:
         self._objectType = ObjectType.WEB
-        self.__hostAddress = hostAddress
+        self._hostAddress = hostAddress
 
         self.__isConnected = False
         self.__timeout = 0.0
@@ -77,7 +77,7 @@ class BaseObject:
     def connecting(self) -> None:
         outputPacket = OutputPacket(self._objectType)
         outputPacket.writeCommand(MessageType.CONNECT)
-        self._networkManager.sendTo(outputPacket, self.__hostAddress)
+        self._networkManager.sendTo(outputPacket, self._hostAddress)
 
         Log("Connecting...")
 
