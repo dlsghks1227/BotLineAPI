@@ -17,12 +17,12 @@ class UDPSocket:
     def sendTo(self, outputPacket: OutputPacket, address: SocketAddress) -> None:
         self.__socket.sendto(outputPacket.data, address.address)
 
-    def receiveFrom(self) -> tuple or None:
+    def receiveFrom(self) -> tuple:
         try:
             data, address = self.__socket.recvfrom(self.__bufferSize)
             if len(data) >= 0:
                 return data, address
         except ConnectionResetError:
-            return -1
+            return (-1, )
         except BlockingIOError:
-            return None
+            return (None, )
