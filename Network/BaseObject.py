@@ -40,8 +40,8 @@ class BaseObject:
     def readIncomingPacketIntoQueue(self) -> None:
         data = self._networkManager.receiveFrom()
 
-        if data is not None:
-            if data == -1:
+        if data[0] is not None:
+            if data[0] == -1:
                 self.__isConnected = False
                 return
             self.__packetQueue.put(data)

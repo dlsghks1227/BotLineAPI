@@ -12,8 +12,11 @@ class DataStreamThread(threading.Thread):
     def __init__(self) -> None:
         super().__init__()
 
+        self.__currentTime = 0.0
+        self.__elapsedTime = 0.0
+
         self.__isRunning = True
-        self.__networkObject = NetworkObject(SocketAddress("localhost", 8080))
+        self.__networkObject = NetworkObject(SocketAddress("localhost", 8000))
 
     def onUpdate(self, elapsedTime: float) -> None:
         self.__networkObject.onUpdate(elapsedTime)
@@ -22,12 +25,10 @@ class DataStreamThread(threading.Thread):
         self.__networkObject.onDestory()
 
     def run(self) -> None:
-        currentTime = 0.0
-        elapsedTime = 0.0
         while self.__isRunning:
-            currentTime = time.perf_counter()
-            self.onUpdate(elapsedTime)
-            elapsedTime = time.perf_counter() - currentTime
+            self.__currentTime = time.perf_counter()
+            self.onUpdate(self.__elapsedTime)
+            self.__elapsedTime = time.perf_counter() - self.__currentTime
         self.onDestory()
 
     def addSendData(self, data: OutputPacket) -> None:
@@ -52,9 +53,9 @@ if __name__ == "__main__":
 
         dataStreamThread.getData()
 
-        outputPacket = OutputPacket(ObjectType.WEB)
-        outputPacket.writeCommand(MessageType.CONNECT)
-        dataStreamThread.addSendData(outputPacket)
+        # outputPacket = OutputPacket(ObjectType.WEB)
+        # outputPacket.writeCommand(MessageType.CONNECT)
+        # .addSendData(outputPacket)
 
     except KeyboardInterrupt:
         dataStreamThread.isRunning = False
