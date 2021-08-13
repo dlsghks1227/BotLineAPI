@@ -8,7 +8,7 @@ from Network.NetworkObject import NetworkObject
 from Util.Log import Log
 
 
-class DataStreamThread(threading.Thread):
+class DataStream:
     def __init__(self) -> None:
         super().__init__()
 
@@ -18,18 +18,13 @@ class DataStreamThread(threading.Thread):
         self.__isRunning = True
         self.__networkObject = NetworkObject(SocketAddress("localhost", 8000))
 
-    def onUpdate(self, elapsedTime: float) -> None:
-        self.__networkObject.onUpdate(elapsedTime)
+    def onUpdate(self) -> None:
+        self.__currentTime = time.perf_counter()
+        self.__networkObject.onUpdate(self.__elapsedTime)
+        self.__elapsedTime = time.perf_counter() - self.__currentTime
 
     def onDestory(self) -> None:
         self.__networkObject.onDestory()
-
-    def run(self) -> None:
-        while self.__isRunning:
-            self.__currentTime = time.perf_counter()
-            self.onUpdate(self.__elapsedTime)
-            self.__elapsedTime = time.perf_counter() - self.__currentTime
-        self.onDestory()
 
     def addSendData(self, data: OutputPacket) -> None:
         self.__networkObject.addSendData(data)
@@ -48,7 +43,7 @@ class DataStreamThread(threading.Thread):
 
 if __name__ == "__main__":
     try:
-        dataStreamThread = DataStreamThread()
+        dataStreamThread = DataStream()
         dataStreamThread.start()
 
         dataStreamThread.getData()
