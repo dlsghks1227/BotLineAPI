@@ -1,8 +1,9 @@
+
 #dataStreamThread는 model에서만 불러올 수 있다.
 
 import enum
-from Network.DataStreamThread import DataStreamThread
 from enum import Enum
+from typing import ValuesView
 
 from Network.Packet import OutputPacket
 from Network.PacketType import MessageType, ObjectType
@@ -31,26 +32,24 @@ class InformationModel:
         pass
 
     def write(self, threadData : dict):
-        keyList = threadData.keys()
-    
-        for i in keyList:
-            self.__setattr__(i, threadData.get(i))
+        for key, value in threadData.values():
+            self.__setattr__(key, value)
     
     # dataStreamThread.getData() returns dict
     def parse(self, threadData):
         self.write(threadData)
 
-    # Web -> Server
-    def createPacket(self):
+    def update(self):
         outputPacket = OutputPacket(ObjectType.WEB)
         outputPacket.writeCommand(Message.CONTROL_WEB)
-        
-        outputPacket.writeUInt32(self.__curX)
-        outputPacket.writeUInt32(self.__curY)
-        outputPacket.writeUInt32(self.__targetX)
-        outputPacket.writeUInt32(self.__targetY)
+
+        for value in self.__dict__.values():
+            outputPacket.writeUInt32(value)
 
         return outputPacket
-    
 
-        #DataStream.addSendTo(outputPacket)
+        
+
+
+        
+

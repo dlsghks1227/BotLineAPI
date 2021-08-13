@@ -1,36 +1,39 @@
+import queue
 from Model.InformationModel import InformationModel
 from Model.ControlModel import ControlModel
 
 from queue import Queue
 
-# controll, accept
+from GlobalVariable import dataStream
 
+# controll, accept
 # 통신
 class ObjectController():
 
     def __init__(self):
-        self.__packetQueue = Queue()
         self.__ControlModel = ControlModel()
         self.__InformationModel = InformationModel()
 
-    def createControllMessage(self):
-        self.__controlModel.send()
-        pass
-
     def add(self):
-        packet = self.__InformationModel.createPacket()
+        packet = self.__InformationModel.insert()
         self.__packetQueue.put(packet)
 
     # jetbot 정보 담는 공간
     def writeInformation(self):
-        #data = dataStream().getData
+        data = dataStream.getData()
         self.__InformationModel.parse(data)
 
+    def sendPacket(self):
+        self.__ControlModel
+
     def updateJetbotInformation(self):
-        return self.__InformationModel.get()
+        pass
 
     def writeServerControlInformation(self):
         pass
 
-    def sendPaceket(self):
-        pass
+
+        
+        
+
+ 

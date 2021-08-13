@@ -1,24 +1,41 @@
-from flask_restx import Api, Resource, Namespace
+from flask_restx import Api,Resource,Namespace
+from queue import Queue
+
+
+from Network.PacketType import ObjectType
 from Controller.ObjectController import ObjectController
 
-Accept_DataStream = Namespace('Accept_DataStream')
-
 objectController = ObjectController()
+
+
+Accept_DataStream = Namespace('Accept_DataStream')
 
 @Accept_DataStream.route('/<int:post_id>')
 class ClientDataStream(Resource): 
     def get(self,post_id):
-        objectController.createControllMessage()
+   
         return {"response" : post_id}
     
-    # def put(self, user_req):
-    #     return {"response" : user_req}
+    def put(self, post_id):
+        return {"response" : post_id}
 
-    # def delete(self,user_req):
-    #     return {"response" : user_req}
+    def delete(self,post_id):
+        return {"response" : post_id}
+
 
 @Accept_DataStream.route('/')
 class Post_ClientDataStream(Resource):
-    def post(request):
-        objectController.updateJetbotInformation()
-        return {"response" : "post"}
+    def post(self):
+
+        requestJson ={
+            "curX" : 0,
+            "curY" : 0,
+            "targetX" : 2,
+            "targetY" : 2,
+            "stateType" : "CONTROL_WEB"
+        }
+        
+        objectController.writeJetbotInformation(requestJson)
+
+
+        
